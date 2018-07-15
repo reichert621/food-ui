@@ -1,31 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import startOfDay from 'date-fns/start_of_day';
-import format from 'date-fns/format';
-import groupBy from 'lodash/groupBy';
-import map from 'lodash/map';
+import React from "react";
+import ReactDOM from "react-dom";
+import startOfDay from "date-fns/start_of_day";
+import format from "date-fns/format";
+import groupBy from "lodash/groupBy";
+import map from "lodash/map";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.less';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.less";
 
 const Attachment = ({ attachment }) => {
   if (!attachment || !attachment.type || !attachment.payload) {
     return null;
   }
-
   const { type, payload } = attachment;
-  const uri = payload['firebase-uri'];
+  const uri = payload["firebase-uri"];
 
   switch (type) {
-    case 'image':
+    case "image":
       return <img src={uri} />;
-    case 'video':
+    case "video":
       return (
         <video controls>
           <source src={uri} />
         </video>
       );
-    case 'audio':
+    case "audio":
       return (
         <audio controls>
           <source src={uri} />
@@ -37,14 +36,11 @@ const Attachment = ({ attachment }) => {
 const Event = ({ event }) => {
   if (!event) return null;
 
-  const {
-    message: { text, attachments = [] },
-    timestamp
-  } = event;
+  const { message: { text, attachments = [] }, timestamp } = event;
 
   return (
     <li className="entry">
-      <div className="entry-time">{format(timestamp, 'h:mma')}</div>
+      <div className="entry-time">{format(timestamp, "h:mma")}</div>
       <div className="entry-content">
         {text ? (
           <div className="entry-text">{text}</div>
@@ -65,40 +61,35 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const config = {
-      apiKey: 'AIzaSyDCSEZlaELZ3zsQdGsJwdjflcpw8Diqv9M',
-      authDomain: 'kareem-2fdc3.firebaseapp.com',
-      databaseURL: 'https://kareem-2fdc3.firebaseio.com',
-      projectId: 'kareem-2fdc3',
-      storageBucket: 'kareem-2fdc3.appspot.com',
-      messagingSenderId: '759332260133'
-    };
+    const userHash = window.location.pathname.slice(1);
 
-    firebase.initializeApp(config);
-
-    const userId = window.location.pathname.slice(1);
-    if (!userId) {
+    if (!userHash) {
       this.setState({ data: {} });
       return;
     }
 
-    this._ref = firebase.database().ref(`/users/${userId}`);
-    this._ref.on('value', this.onValue);
+    window
+      .fetch(`https://nutritionapi.herokuapp.com/users/${userHash}`)
+      .then(res => res.json())
+      .then(rawEntries => {
+        const parsedEntries = Object.values(rawEntries);
+        const entriesByDate = map(
+          groupBy(parsedEntries, e => startOfDay(e.timestamp).getTime()),
+          (v, k) => ({
+            date: parseInt(k),
+            entries: v.sort((x, y) => x.timestamp - y.timestamp)
+          })
+        ).sort();
+        this.setState({ entriesByDate });
+      })
+      .catch(err => {
+        console.log("Error!", err);
+        this.setState({ data: {} });
+      });
   }
 
   onValue = snapshot => {
     const rawEntries = snapshot.val();
-    const parsedEntries = Object.values(rawEntries);
-
-    const entriesByDate = map(
-      groupBy(parsedEntries, e => startOfDay(e.timestamp).getTime()),
-      (v, k) => ({
-        date: parseInt(k),
-        entries: v.sort((x, y) => x.timestamp - y.timestamp)
-      })
-    ).sort();
-
-    this.setState({ data: snapshot.val() || {}, entriesByDate });
   };
 
   render() {
@@ -117,7 +108,7 @@ class App extends React.Component {
         <h1 className="header">🍏 kareem</h1>
         {entriesByDate.map(({ date, entries }) => (
           <div className="day">
-            <h3 className="day-date">{format(date, 'ddd, MMM D')}</h3>
+            <h3 className="day-date">{format(date, "ddd, MMM D")}</h3>
             <ul className="entries">
               {entries.map(event => (
                 <Event key={event.timestamp} event={event} />
@@ -130,4 +121,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById("app"));
