@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
 
 module.exports = {
   node: {
@@ -34,12 +35,14 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "build"),
     port: 1337,
-    historyApiFallback: true
+    historyApiFallback: true,
+    hot: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html",
       inject: "body"
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };
