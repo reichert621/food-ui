@@ -5,6 +5,7 @@
   "main": "src/App.js",
   "scripts": {
     "dev": "webpack-dev-server --open",
+    "build": "webpack -p",
     "start": "npm run dev"
   },
   "author": "",
