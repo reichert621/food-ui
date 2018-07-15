@@ -66,27 +66,21 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const config = {
-      apiKey: "AIzaSyDCSEZlaELZ3zsQdGsJwdjflcpw8Diqv9M",
-      authDomain: "kareem-2fdc3.firebaseapp.com",
-      databaseURL: "https://kareem-2fdc3.firebaseio.com",
-      projectId: "kareem-2fdc3",
-      storageBucket: "kareem-2fdc3.appspot.com",
-      messagingSenderId: "759332260133"
-    };
+    const userHash = window.location.pathname.slice(1);
 
-    firebase.initializeApp(config);
-
-    const userId = window.location.pathname.slice(1);
-    if (!userId) {
+    if (!userHash) {
       this.setState({ data: {} });
       return;
     }
 
-    this._ref = firebase.database().ref(`/users/${userId}`);
-    this._ref.on("value", snapshot => {
-      this.setState({ data: snapshot.val() || {} });
-    });
+    window
+      .fetch(`https://nutritionapi.herokuapp.com/users/${userHash}`)
+      .then(res => res.json())
+      .then(data => this.setState({ data }))
+      .catch(err => {
+        console.log("Error!", err);
+        this.setState({ data: {} });
+      });
   }
 
   render() {
