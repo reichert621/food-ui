@@ -1,14 +1,17 @@
 /* Fonts */
-@font-default: 'Helvetica Neue', Arial, san-serif;
+@font-default: "Helvetica Neue", Arial, san-serif;
 
 /* Colors */
 @gray: #979797;
 @green: #3db787;
-@blue: #33A2CC;
+@blue: #33a2cc;
 @red: #da2a54;
 @black: #000;
 @white: #fff;
 
+body {
+  box-sizing: border-box;
+}
 /* Custom CSS classes */
 .app {
   font-family: @font-default;
@@ -16,4 +19,10 @@
 
 .ports-container {
   padding: 40px;
+}
+
+.attachment-container img,
+.attachment-container video,
+.attachment-container audio {
+  width: 200px;
 }
