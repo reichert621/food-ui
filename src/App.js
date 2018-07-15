@@ -4,8 +4,6 @@ import startOfDay from 'date-fns/start_of_day';
 import format from 'date-fns/format';
 import groupBy from 'lodash/groupBy';
 import map from 'lodash/map';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.less';
 
 const Attachment = ({ attachment }) => {
