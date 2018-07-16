@@ -5,6 +5,7 @@ import format from 'date-fns/format';
 import groupBy from 'lodash/groupBy';
 import map from 'lodash/map';
 import './App.less';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 const Attachment = ({ attachment }) => {
   if (!attachment || !attachment.type || !attachment.payload) {
@@ -55,14 +56,18 @@ const Event = ({ event }) => {
   );
 };
 
-class App extends React.Component {
+function Header() {
+  return <h1 className="header">👋 pluot</h1>;
+}
+
+class Log extends React.Component {
   constructor(props) {
     super(props);
     this.state = { entriesByDate: null };
   }
 
   componentDidMount() {
-    const userHash = window.location.pathname.slice(1);
+    const userHash = this.props.match.params.hash;
 
     if (!userHash) {
       this.setState({ data: {} });
@@ -106,10 +111,10 @@ class App extends React.Component {
     }
 
     return (
-      <div>
-        <h1 className="header">🍎 pluot</h1>
+      <div className="log">
+        <Header />
         {entriesByDate.map(({ date, entries }) => (
-          <div className="day">
+          <div key={date} className="day">
             <h3 className="day-date">{format(date, 'ddd, MMM D')}</h3>
             <ul className="entries">
               {entries.map(event => (
@@ -123,4 +128,33 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+class Home extends React.Component {
+  render() {
+    return (
+      <div className="home">
+        <div>
+          <Header />
+          <div className="intro">
+            <a
+              className="messenger-button"
+              href="https://m.me/hipluot"
+              target="_blank"
+            >
+              Start logging 👉
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Router>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/u/:hash" component={Log} />
+    </Switch>
+  </Router>,
+  document.getElementById('app')
+);
