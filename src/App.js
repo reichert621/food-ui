@@ -69,12 +69,6 @@ class Log extends React.Component {
 
   componentDidMount() {
     const userHash = this.props.match.params.hash;
-
-    if (!userHash) {
-      this.setState({ data: {} });
-      return;
-    }
-
     window
       .fetch(`https://nutritionapi.herokuapp.com/users/${userHash}`)
       .then(res => res.json())
@@ -95,10 +89,6 @@ class Log extends React.Component {
         this.setState({ data: {} });
       });
   }
-
-  onValue = snapshot => {
-    const rawEntries = snapshot.val();
-  };
 
   render() {
     const { entriesByDate } = this.state;
