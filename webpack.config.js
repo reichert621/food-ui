@@ -9,7 +9,7 @@ module.exports = {
   entry: './src/App.js',
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'bundle.js',
+    filename: 'bundle.[chunkhash].js',
     publicPath: '/'
   },
   resolve: {
