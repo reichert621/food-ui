@@ -32,7 +32,7 @@ body {
 .header {
   text-align: center;
   font-weight: 900;
-  font-size: 30px;
+  font-size: 40px;
   color: #333;
   margin-bottom: 20px;
 }
@@ -57,7 +57,8 @@ body {
   flex: 0 0 175px;
   height: 380px;
   color: @white;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   margin-bottom: 10px;
   border-radius: 5px;
   transition: box-shadow 300ms;
@@ -82,6 +83,7 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
   padding: 4px 10px;
   border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   font-weight: 700;
 }
 
@@ -100,7 +102,8 @@ body {
 .entry-attachment-container img,
 .entry-attachment-container video,
 .entry-attachment-container audio {
-  max-width: 175px;
+  max-width: 100%;
+  border-radius: 5px;
 }
 
 .home {
@@ -132,23 +135,13 @@ body {
   }
 }
 @media (max-width: 480px) {
-  .entries {
-    justify-content: center;
-  }
-
   .entry {
-    flex: 0 0 145px;
-    height: 315px;
+    flex: 0 0 95px;
+    height: 206px;
     word-break: break-word;
   }
 
   .entry-text {
     font-size: 18px;
-  }
-
-  .entry-attachment-container img,
-  .entry-attachment-container video,
-  .entry-attachment-container audio {
-    max-width: 145px;
   }
 }
