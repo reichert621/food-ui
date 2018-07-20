@@ -128,7 +128,6 @@ function Home() {
           <a
             className="messenger-button"
             href="https://m.me/hipluot"
-            target="_blank"
           >
             Start logging 👉
           </a>
