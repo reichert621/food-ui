@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PrivacyInfo from './PrivacyInfo';
 
 const Attachment = ({ attachment }) => {
+
   if (!attachment || !attachment.type || !attachment.payload) {
     return null;
   }
